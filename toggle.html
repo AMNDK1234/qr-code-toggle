@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head>
+  <meta charset="utf-8"><title>Toggle QR</title>
+</head><body>
+  <h1>Toggle QR Code Status</h1>
+  <label>Label:</label><br><input id="labelInput"><br>
+  <button onclick="toggle(true)">Activate</button>
+  <button onclick="toggle(false)">Deactivate</button>
+  <h3>Updated JSON below:</h3><pre id="out"></pre>
+
+  <script>
+    async function getStatus() {
+      try { return await fetch('status.json').then(r=>r.json()); } catch { return {}; }
+    }
+    async function toggle(active){
+      const label = document.getElementById('labelInput').value.trim();
+      if(!label){ alert('Enter label'); return; }
+      const status = await getStatus();
+      if(!status[label]){ alert('Label not exist'); return; }
+      status[label].active = active;
+      document.getElementById('out').innerText = JSON.stringify(status,null,2);
+    }
+  </script>
+</body></html>
+
