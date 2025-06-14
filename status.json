@@ -1,4 +1,0 @@
-{
-  "office": { "active": true, "destination": "https://example.com" },
-  "personal": { "active": false, "destination": "tel:+1234567890" }
-}
