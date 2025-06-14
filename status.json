@@ -1,8 +1,0 @@
-{
-  /* uniqueID: { url, active } */
-  "codes": {
-    "ex123": { "url": "https://example.com", "active": true }
-  }
-}
-
-
