@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Active Page</title>
+</head>
+<body>
+  <script>
+    async function redirectToDestination() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+
+      const res = await fetch("status.json");
+      const data = await res.json();
+
+      const code = data.codes.find(q => q.id === id);
+      if (!code) {
+        window.location.href = "404.html";
+        return;
+      }
+
+      if (code.active) {
+        window.location.href = code.destination;
+      } else {
+        window.location.href = "404.html";
+      }
+    }
+
+    redirectToDestination();
+  </script>
+</body>
+</html>
+

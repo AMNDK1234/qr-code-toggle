@@ -1,0 +1,15 @@
+{
+  "codes": [
+    {
+      "id": "qr1",
+      "destination": "https://example.com",
+      "active": true
+    },
+    {
+      "id": "qr2",
+      "destination": "tel:+123456789",
+      "active": false
+    }
+  ]
+}
+

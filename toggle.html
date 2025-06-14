@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Toggle QR</title>
+</head>
+<body>
+  <h1>Toggle QR Code</h1>
+  <div id="message"></div>
+
+  <script>
+    async function toggleQR() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+
+      const res = await fetch("status.json");
+      const data = await res.json();
+
+      const code = data.codes.find(q => q.id === id);
+      if (!code) {
+        document.getElementById("message").textContent = "QR Code not found.";
+        return;
+      }
+
+      code.active = !code.active;
+
+      // Show status (you can't actually write to status.json on GitHub Pages)
+      document.getElementById("message").innerHTML = `
+        QR Code <b>${id}</b> is now <b>${code.active ? "Active ✅" : "Inactive ❌"}</b><br><br>
+        <a href="index.html">← Back to Home</a><br><br>
+        <strong>Note:</strong> You must update <code>status.json</code> manually if using static hosting.
+      `;
+
+      console.log(JSON.stringify(data, null, 2)); // Copy this JSON back to `status.json`
+    }
+
+    toggleQR();
+  </script>
+</body>
+</html>
+
+
