@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Toggle QR Status</title>
+</head>
+<body>
+  <h2>Change QR Code Status</h2>
+  <button onclick="setStatus(true)">Activate</button>
+  <button onclick="setStatus(false)">Deactivate</button>
+
+  <p>Copy and paste this into <code>status.json</code> file on GitHub</p>
+  <pre id="code"></pre>
+
+  <script>
+    function setStatus(status) {
+      const json = JSON.stringify({ active: status }, null, 2);
+      document.getElementById('code').innerText = json;
+    }
+  </script>
+</body>
+</html>
