@@ -1,0 +1,68 @@
+<!DOCTYPE html><html><head>
+  <meta charset="utf-8"><title>QR Manager</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: sans-serif; }
+    .qr-item { border: 1px solid #ddd; padding: 10px; margin: 10px }
+    .qr-buttons { margin-top: 5px; }
+  </style>
+</head><body>
+  <h1>QR Manager</h1>
+  <label>Label (must be unique):</label><br>
+  <input type="text" id="labelInput" placeholder="e.g., office"><br>
+  <label>Enter URL or phone (tel:+…):</label><br>
+  <input type="text" id="linkInput" placeholder="https://... or tel:+..."><br><br>
+  <button onclick="addQRCode()">Add / Update QR</button>
+
+  <h2>QR Codes List</h2>
+  <div id="list"></div>
+
+  <script>
+    async function loadStatus() {
+      try { return await fetch('status.json').then(r => r.json()); }
+      catch { return {}; }
+    }
+    function copyJSON(obj) {
+      alert("Copy this JSON and paste into status.json:\n\n" + JSON.stringify(obj, null, 2));
+    }
+    async function renderList() {
+      const status = await loadStatus();
+      const listDiv = document.getElementById('list');
+      listDiv.innerHTML = '';
+      for (const key in status) {
+        const cfg = status[key];
+        const div = document.createElement('div');
+        div.className = 'qr-item';
+        div.innerHTML = `<strong>${key}</strong> — ${cfg.active ? '🟢 Active' : '🔴 Inactive'}<br>`;
+        const qrDiv = document.createElement('div');
+        div.appendChild(qrDiv);
+        new QRCode(qrDiv, {
+          text: window.location.origin + '/redirect.html?label=' + encodeURIComponent(key),
+          width: 128, height: 128
+        });
+        const img = qrDiv.querySelector('img') || qrDiv.querySelector('canvas');
+        const link = document.createElement('a');
+        link.innerText = 'Download JPEG';
+        link.href = img.src.replace('image/png', 'image/jpeg');
+        link.download = key + '.jpg';
+        link.className = 'qr-buttons';
+        div.appendChild(link);
+        div.innerHTML += `<p>Destination: ${cfg.destination}</p>`;
+        listDiv.appendChild(div);
+      }
+    }
+    async function addQRCode() {
+      const label = document.getElementById('labelInput').value.trim();
+      const link = document.getElementById('linkInput').value.trim();
+      if (!label || !link) {
+        alert('Both label and link are required.');
+        return;
+      }
+      const status = await loadStatus();
+      status[label] = { active: true, destination: link };
+      copyJSON(status);
+      await renderList();
+    }
+    renderList();
+  </script>
+</body></html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Redirecting...</title></head><body>
+  <script>
+    const label = new URLSearchParams(location.search).get('label');
+    fetch('status.json').then(r => r.json()).then(stat => {
+      const cfg = stat[label];
+      if (cfg && cfg.active && cfg.destination) {
+        window.location.href = cfg.destination;
+      } else {
+        window.location.href = '404.html';
+      }
+    }).catch(() => location.href = '404.html');
+  </script>
+  <p>Redirecting…</p>
+</body></html>
