@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Toggle QR Status</title>
+</head>
+<body>
+  <h2>Toggle QR Code Status</h2>
+
+  <label for="linkInput">Current URL or Phone:</label><br>
+  <input type="text" id="linkInput" placeholder="https://example.com or tel:+123456789"><br><br>
+
+  <button onclick="toggleStatus(true)">Activate</button>
+  <button onclick="toggleStatus(false)">Deactivate</button>
+
+  <h3>Copy this JSON to status.json</h3>
+  <pre id="output"></pre>
+
+  <script>
+    function toggleStatus(isActive) {
+      const link = document.getElementById('linkInput').value.trim();
+      if (!link && isActive) {
+        alert("Please enter a URL or phone number.");
+        return;
+      }
+
+      const json = JSON.stringify({ active: isActive, destination: link }, null, 2);
+      document.getElementById("output").innerText = json;
+    }
+  </script>
+</body>
+</html>
